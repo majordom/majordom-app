@@ -1,0 +1,74 @@
+<Home>:
+	devices_screen: devices_screen
+	StackLayout:
+		padding: ['10dp', '58dp', '10dp', '10dp']
+		spacing: '10dp'
+		id: devices_screen
+		orientation: 'lr-tb'
+
+<DeviceBox>:
+	size_hint: (None, None)
+	height: '200dp'
+	width: '150dp'
+	canvas.before:
+		Color:
+			rgb: (60.0/255,60.0/255,60.0/255, 1)
+		Rectangle:
+			size: self.size
+			pos: self.pos
+
+<AddDevicePopup>:
+	scrollview: scrollview
+	size_hint: (0.9, 0.9)
+	pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+	ScrollView:
+		id: scrollview
+		
+<ListView>
+	size_hint: (1, None)
+	height: sum([el.height for el in self.children])
+	orientation: 'tb-lr'
+	pos_hint: {'top': 1}
+
+<HomeMenu>:
+	add_device_button: add_device_button
+	ActionBar
+		id: actionbar
+		pos_hint: {'top':1}
+		ActionView:
+			use_separator: True
+			ActionPrevious:
+	            title: 'Home'
+	            with_previous: False
+	            app_icon: 'logo.png'
+			ActionButton:
+				id: add_device_button
+				minimum_width: overflow.my_width    
+				text: 'Add a new device'
+				on_release: root.body.open_add_device_popup()
+			ActionGroup:
+				id: selectgroup
+				my_width: '130dp'
+				text: 'Select view'
+				mode: 'spinner'
+				ActionButton:
+					minimum_width: selectgroup.my_width
+					text: 'Starred devices'
+				ActionButton:
+					minimum_width: selectgroup.my_width
+					text: 'All devices'
+			ActionOverflow:
+				id: overflow
+				my_width: '150dp'
+				ActionButton:
+					minimum_width: overflow.my_width   
+					text: 'Manage scenarios'
+					on_release:
+						overflow._dropdown.dismiss()
+						app.body.current = 'scenarios'
+				ActionButton:
+					minimum_width: overflow.my_width
+					text: 'Settings'
+					on_release:
+						overflow._dropdown.dismiss()
+						app.open_settings()

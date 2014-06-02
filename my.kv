@@ -1,0 +1,135 @@
+<MainWidget>:
+	orientation: 'vertical'
+    manager: manager
+	Menu
+		manager: root.manager
+	ScreenManager:
+        id: manager
+        MainScreen:
+        	id: home_screen
+            name: 'home'
+            server: root.server
+        Screen:
+            id: scenarios
+            name: 'scenarios'
+            Button:
+            	text: 'screen_two'
+        Screen:
+            id: sc3
+            name: 'screen_three'
+            Button:
+            	text: 'screen_three'
+
+<Menu@ActionBar>
+	manager: None
+    pos_hint: {'top':1}
+    ActionView:
+        use_separator: True
+        ActionPrevious:
+            title: ''
+            app_icon: 'logo.png'
+            with_previous: False
+        ActionButton:     
+            text: 'Home'
+            on_press: root.manager.current = 'home'
+        ActionGroup:
+            text: 'Add'
+            ActionButton:
+                text: 'Add a device'
+            ActionButton:
+                text: 'Add a scenario'
+        ActionGroup:
+            text: 'Settings'
+            ActionButton:
+                text: 'Scenarios'
+                on_press: root.manager.current = 'scenarios'
+            ActionButton:
+                text: 'Actions'
+            ActionButton:
+                text: 'Informations'
+            ActionButton:
+                text: 'Devices'
+            ActionButton:
+                text: 'Protocols'
+            ActionButton:
+                text: 'Drivers'
+
+
+<MainScreen>
+	orientation: 'vertical'
+	displaybox: displaybox
+	BoxLayout:
+		height: '50dp'
+		size_hint: (1, None)
+		orientation: 'horizontal'
+		Button:
+			text: 'Display another information'
+			pos_hint: {'top':1}
+		Button:
+			text: 'Display another action'
+			pos_hint: {'top':1}
+	DisplayBox
+		id: displaybox
+		orientation: 'lr-tb'
+		infos: root.infos
+		actions: root.actions
+
+<DisplayBox>
+	padding: 10
+	spacing: 20
+
+<InfoDisplay>
+	pos_hint: {'top':1}
+	width: '200dp'
+	height: name.height + switch.height
+	size_hint: (None, None)
+	orientation: 'vertical'
+	Label:
+		canvas.before:
+			Clear
+		    Color:
+		        rgba: 88, 88, 88, 1
+		    Line:
+		    	points: [self.pos[0], self.pos[1], self.pos[0]+self.size[0], self.pos[1]]
+		padding: (5, 5)
+		text: root.name       	
+		id: name
+		halign: 'center'
+		valign: 'middle'
+		text_size: (root.width, None)
+		size: self.texture_size
+		size_hint: (None, None)
+		border: (10,10,10,10)
+	Switch:
+		id: switch
+		active: True
+		disabled: True
+		height: '50dp'
+
+<ActionDisplay>
+	pos_hint: {'top':1}
+	width: '200dp'
+	height: name.height + button.height
+	size_hint: (None, None)
+	orientation: 'vertical'
+	Label:
+		canvas.before:
+			Clear
+		    Color:
+		        rgba: 88, 88, 88, 1
+		    Line:
+		    	points: [self.pos[0], self.pos[1], self.pos[0]+self.size[0], self.pos[1]]
+		padding: (5, 5)
+		text: root.name       	
+		id: name
+		halign: 'center'
+		valign: 'middle'
+		text_size: (root.width, None)
+		size: self.texture_size
+		size_hint: (None, None)
+		border: (10,10,10,10)
+	Button:
+		id: button
+		text: 'execute'
+		height: '30dp'
+		on_press: root.execute_action()

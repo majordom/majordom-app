@@ -1,0 +1,54 @@
+<Login>
+	server: server
+	username: username
+	password: password
+	GridLayout:
+		rows: 3
+		cols: 2
+		size_hint: (None, None)
+		width: '250dp'
+		pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+		spacing: '5dp'
+		Label:
+			text: 'Server'
+			text_size: (None, None)
+			size: self.texture_size
+			size_hint: (None, 1)
+		TextInput:
+			id: server
+			text: 'http://192.168.0.2:8080/'
+			multiline: False
+			height: '40dp'
+		Label:
+			text: 'Username'
+			text_size: (None, None)
+			size: self.texture_size
+			size_hint: (None, 1)
+		TextInput:
+			id: username
+			multiline: False
+			height: '40dp'
+		Label:
+			text: 'Password'
+			text_size: (None, None)
+			size: self.texture_size
+			size_hint: (None, 1)
+		TextInput:
+			id: password
+			multiline: False
+			password: True
+			height: '40dp'
+
+<LoginMenu>:
+	ActionBar
+		id: actionbar
+		pos_hint: {'top':1}
+		ActionView:
+			use_separator: True
+			ActionPrevious:
+	            title: 'Majordom App'
+	            with_previous: False
+	            app_icon: 'logo.png'
+			ActionButton:     
+				text: 'Connect'
+				on_press: root.body.connect()

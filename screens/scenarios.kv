@@ -1,0 +1,204 @@
+<Scenarios>:
+	scenarios_list: scenarios_list
+	pos_hint: {'top': 1}
+	ScrollView:
+		StackLayout:
+			padding: [0, '48dp', 0, 0]
+			size_hint: (1, None)
+			height: sum([el.height for el in self.children]) + dp(48)
+			#pos_hint: {'top': 1}
+			orientation: 'tb-lr'
+			id: scenarios_list
+			Button:
+				pos_hint: {'top': 1}
+
+<ScenariosMenu>:
+	ActionBar
+		id: actionbar
+		pos_hint: {'top':1}
+		ActionView:
+			use_separator: True
+			ActionPrevious:
+	            title: 'Manage scenarios'
+	            with_previous: True
+	            app_icon: 'logo.png'
+	            on_release: root.body.go_back()
+	        ActionButton:
+				text: 'Add a new scenario'
+				on_release: app.body.current = 'newscenario'
+	        
+
+<NewScenario>
+	scenario_name: scenario_name
+	description: description
+	GridLayout:
+		#padding: [0, '48dp', 0, 0]	
+		rows: 2
+		cols: 2
+		size_hint: (None, None)
+		width: '250dp'
+		pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+		spacing: '5dp'
+		Label:
+			text: 'Name'
+			text_size: (None, None)
+			#size: self.texture_size
+			size_hint: (None, None)
+			height: '30dp'
+		TextInput:
+			id: scenario_name 
+			multiline: False
+			height: '30dp'
+		Label:
+			text: 'Description'
+			text_size: (None, None)
+			#size: self.texture_size
+			size_hint: (None, None)
+			height: '90dp'
+		TextInput:
+			id: description
+			multiline: True
+			height: '90dp'
+
+<NewScenarioMenu>
+	ActionBar
+		id: actionbar
+		pos_hint: {'top':1}
+		ActionView:
+			use_separator: True
+			ActionPrevious:
+	            title: 'Add a new scenario'
+	            with_previous: True
+	            app_icon: 'logo.png'
+	            on_release: root.body.go_back()
+	        ActionButton:
+				text: 'Continue'
+				on_release: root.body.add_new_scenario()
+
+<BlockSettingsPopup>
+	size_hint: (0.5, 0.5)
+	pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+	
+<AddPopup>:
+	list: list
+	size_hint: (0.9, 0.9)
+	pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+	ScrollView:
+		StackLayout:
+			size_hint: (1, None)
+			height: sum([el.height for el in self.children])
+			orientation: 'tb-lr'
+			id: list
+			Button:
+				pos_hint: {'top': 1}
+
+<EditScenario>
+	scenario_canvas: scenario_canvas
+	#BoxLayout: 
+	ScatterPlane:
+		id: scenario_canvas
+		scale_min: 0.5
+		scale_max: 2
+		do_rotation: False
+		auto_bring_to_front: False
+			
+<Block>:
+	drag_timeout: 20
+	do_collide_after_children: True
+	do_scale: False
+	do_rotation: False
+	height: max(len(self.input_nodes), len(self.output_nodes))*dp(30)+dp(50)
+	width: label.width
+	block_layout: block_layout
+	canvas.before:
+		Color:
+			rgb: (60.0/255,60.0/255,60.0/255, 1)
+		Rectangle:
+			size: self.size
+	FloatLayout:
+		id: block_layout 
+		size_hint: (None, None)
+		size: root.size
+	Label:
+		id: label
+		text: root.name
+		size_hint: (None, None)
+		width: self.texture_size[0]+dp(50)
+		height: root.height
+
+<BlockBubble>:
+	size_hint: (None, None)
+	size: (sum([c.width for c in root.children])+dp(30), dp(50))
+	pos_hint: {'center_x': .5, 'y': .6}
+	BubbleButton:
+		text: 'Remove'
+		on_press: root.remove_block()
+
+<Node>:
+	size_hint: (None, None)
+	size: (30, 30)
+	canvas:
+		Color:
+			rgb: (40.0/255,40.0/255,40.0/255, 1)
+		Ellipse:
+			pos: self.pos
+			size: self.size
+
+<InputNode>:
+	Label:
+		text: root.name
+		pos_hint: {'right': 0, 'center_y': 0.5}
+
+<OutputNode>:
+	Label:
+		text: root.name
+		pos_hint: {'x': 1, 'center_y': 0.5}		  
+
+<LinkBubble>:
+	size_hint: (None, None)
+	size: (sum([c.width for c in root.children])+dp(30), dp(50))
+	pos_hint: {'center_x': .5, 'y': .5}
+	BubbleButton:
+		text: 'Remove'
+		on_press: root.remove_link()
+	
+<EditScenarioMenu>
+	actionview: actionview
+	toggle_button: toggle_button
+	ActionBar
+		id: actionbar
+		pos_hint: {'top':1}
+		ActionView:
+			id: actionview
+			use_separator: True
+			ActionPrevious:
+	            title: 'Editing scenario'
+	            with_previous: True
+	            app_icon: 'logo.png'
+	            on_release: root.body.go_back()
+	        ActionGroup:
+	        	id: add_group
+	        	text: 'Add...'
+	        	my_width: '150dp'
+		        ActionButton:
+		        	minimum_width: add_group.my_width
+					text: 'Add a block'
+					on_release: root.body.open_add_popup('block')
+				ActionButton:
+		        	minimum_width: add_group.my_width
+					text: 'Add an action'
+					on_release: root.body.open_add_popup('action')
+				ActionButton:
+		        	minimum_width: add_group.my_width
+					text: 'Add an info'
+					on_release: root.body.open_add_popup('info')
+			ActionOverflow:
+				id: overflow
+				my_width: '150dp'
+				ActionButton:
+					minimum_width: overflow.my_width
+					id: toggle_button
+					on_release: root.toggle_button_pressed()
+				ActionButton:
+					minimum_width: overflow.my_width
+					text: 'Settings'				
